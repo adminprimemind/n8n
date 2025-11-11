@@ -1,0 +1,61 @@
+// PM2 Ecosystem Configuration for n8n
+// Copy this file to ecosystem.config.js and update the paths
+
+module.exports = {
+  apps: [{
+    name: 'n8n',
+    script: './packages/cli/bin/n8n',
+    cwd: process.cwd(), // Current working directory (project root)
+    instances: 1,
+    exec_mode: 'fork',
+    
+    // Environment variables
+    env: {
+      NODE_ENV: 'production',
+      N8N_PORT: 5678,
+      N8N_PROTOCOL: 'http',
+      N8N_HOST: '0.0.0.0',
+      
+      // Database configuration
+      DB_TYPE: 'sqlite',
+      DB_SQLITE_DATABASE: './n8n-data/database.sqlite',
+      DB_SQLITE_POOL_SIZE: 10,
+      
+      // Security
+      N8N_BASIC_AUTH_ACTIVE: 'true',
+      N8N_BASIC_AUTH_USER: 'admin',
+      N8N_BASIC_AUTH_PASSWORD: 'change-this-password',
+      
+      // Task Runners (recommended)
+      N8N_RUNNERS_ENABLED: 'true',
+      
+      // Security Settings
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: 'false',
+      N8N_GIT_NODE_DISABLE_BARE_REPOS: 'true',
+      
+      // Timezone
+      TZ: 'UTC',
+      
+      // Production optimizations
+      N8N_METRICS: 'true',
+    },
+    
+    // Logging
+    error_file: './logs/pm2-error.log',
+    out_file: './logs/pm2-out.log',
+    log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
+    merge_logs: true,
+    
+    // Process management
+    autorestart: true,
+    max_memory_restart: '1G',
+    min_uptime: '10s',
+    max_restarts: 10,
+    
+    // Advanced options
+    watch: false, // Set to true for development
+    ignore_watch: ['node_modules', 'logs', '.git'],
+  }]
+};
+
+
